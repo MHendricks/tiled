@@ -81,6 +81,11 @@ public:
     unsigned cellToGid(const Cell &cell) const;
 
     /**
+     * Clear existing tilesets and tile widths, and adds the tilesets.
+     */
+    void setTilesets(const QList<Tileset *> &tilesets);
+
+    /**
      * This sets the original tileset width. In case the image size has
      * changed, the tile indexes will be adjusted automatically when using
      * gidToCell().

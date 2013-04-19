@@ -33,6 +33,7 @@
 
 #include "layer.h"
 #include "object.h"
+#include "gidmapper.h"
 
 #include <QColor>
 #include <QList>
@@ -238,6 +239,11 @@ public:
     void addTileset(Tileset *tileset);
 
     /**
+     * Use this to get the global id for tiles.
+     */
+     GidMapper gidMapper() { return mGidMapper; };
+
+    /**
      * Inserts \a tileset at \a index in the list of tilesets used by this map.
      */
     void insertTileset(int index, Tileset *tileset);
@@ -326,6 +332,7 @@ private:
     QList<Layer*> mLayers;
     QList<Tileset*> mTilesets;
     LayerDataFormat mLayerDataFormat;
+    GidMapper mGidMapper;
 };
 
 /**

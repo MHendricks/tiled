@@ -79,6 +79,7 @@
 #include "commandbutton.h"
 #include "objectsdock.h"
 #include "minimapdock.h"
+#include "tile.h"
 
 #ifdef Q_WS_MAC
 #include "macsupport.h"
@@ -120,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     , mZoomable(0)
     , mZoomComboBox(new QComboBox)
     , mStatusInfoLabel(new QLabel)
+    , mTileInfoLabel(new QLabel)
     , mClipboardManager(new ClipboardManager(this))
     , mDocumentManager(DocumentManager::instance())
 {
@@ -395,6 +397,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     connect(toolManager, SIGNAL(statusInfoChanged(QString)),
             this, SLOT(updateStatusInfoLabel(QString)));
     statusBar()->addWidget(mCurrentLayerLabel);
+    statusBar()->addWidget(mTileInfoLabel);
 
     mUi->menuView->addSeparator();
     mUi->menuView->addAction(mTilesetDock->toggleViewAction());
@@ -1400,6 +1403,8 @@ void MainWindow::setStampBrush(const TileLayer *tiles)
     AbstractTool *selectedTool = m->selectedTool();
     if (selectedTool != mStampBrush && selectedTool != mBucketFillTool)
         m->selectTool(mStampBrush);
+
+    updateStatusTileInfoLabel(tiles);
 }
 
 /**
@@ -1419,6 +1424,24 @@ void MainWindow::setTerrainBrush(const Terrain *terrain)
 void MainWindow::updateStatusInfoLabel(const QString &statusInfo)
 {
     mStatusInfoLabel->setText(statusInfo);
+}
+
+void MainWindow::updateStatusTileInfoLabel(const TileLayer* tiles)
+{
+    // TODO: this should be updated when the tilesets are
+    // reordered, removed, or resized.
+    Map *map = mMapDocument->map();
+    const QRect bounds = tiles->region().boundingRect();
+    if (!map || bounds.isEmpty()) {
+        mTileInfoLabel->setText(tr(""));
+        return;
+    }
+    const Cell cell = tiles->cellAt(bounds.x(), bounds.y());
+    if (!cell.isEmpty())
+    {
+        mTileInfoLabel->setText(tr("Selected Tile GID: %1").arg(
+            map->gidMapper().cellToGid(cell)));
+    }
 }
 
 void MainWindow::writeSettings()

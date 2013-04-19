@@ -157,6 +157,7 @@ public slots:
     void setStampBrush(const TileLayer *tiles);
     void setTerrainBrush(const Terrain *terrain);
     void updateStatusInfoLabel(const QString &statusInfo);
+    void updateStatusTileInfoLabel(const TileLayer* tiles);
 
     void mapDocumentChanged(MapDocument *mapDocument);
     void closeMapDocument(int index);
@@ -222,6 +223,7 @@ private:
     Zoomable *mZoomable;
     QComboBox *mZoomComboBox;
     QLabel *mStatusInfoLabel;
+    QLabel *mTileInfoLabel;
     QSettings mSettings;
     QToolButton *mRandomButton;
     CommandButton *mCommandButton;

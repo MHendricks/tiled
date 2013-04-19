@@ -45,11 +45,7 @@ GidMapper::GidMapper()
 
 GidMapper::GidMapper(const QList<Tileset *> &tilesets)
 {
-    unsigned firstGid = 1;
-    foreach (Tileset *tileset, tilesets) {
-        insert(firstGid, tileset);
-        firstGid += tileset->tileCount();
-    }
+    setTilesets(tilesets);
 }
 
 Cell GidMapper::gidToCell(unsigned gid, bool &ok) const
@@ -123,6 +119,19 @@ unsigned GidMapper::cellToGid(const Cell &cell) const
 
     return gid;
 }
+
+void GidMapper::setTilesets(const QList<Tileset *> &tilesets)
+{
+    clear();
+    // Does this need to be reset?
+    mTilesetColumnCounts.clear();
+    unsigned firstGid = 1;
+    foreach (Tileset *tileset, tilesets) {
+        insert(firstGid, tileset);
+        firstGid += tileset->tileCount();
+    }
+}
+
 
 void GidMapper::setTilesetWidth(const Tileset *tileset, int width)
 {

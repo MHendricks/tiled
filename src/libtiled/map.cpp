@@ -152,11 +152,13 @@ Layer *Map::takeLayerAt(int index)
 void Map::addTileset(Tileset *tileset)
 {
     mTilesets.append(tileset);
+    mGidMapper.setTilesets(mTilesets);
 }
 
 void Map::insertTileset(int index, Tileset *tileset)
 {
     mTilesets.insert(index, tileset);
+    mGidMapper.setTilesets(mTilesets);
 }
 
 int Map::indexOfTileset(Tileset *tileset) const
@@ -167,6 +169,7 @@ int Map::indexOfTileset(Tileset *tileset) const
 void Map::removeTilesetAt(int index)
 {
     mTilesets.removeAt(index);
+    mGidMapper.setTilesets(mTilesets);
 }
 
 void Map::replaceTileset(Tileset *oldTileset, Tileset *newTileset)
@@ -178,6 +181,7 @@ void Map::replaceTileset(Tileset *oldTileset, Tileset *newTileset)
         layer->replaceReferencesToTileset(oldTileset, newTileset);
 
     mTilesets.replace(index, newTileset);
+    mGidMapper.setTilesets(mTilesets);
 }
 
 bool Map::isTilesetUsed(Tileset *tileset) const
@@ -196,6 +200,7 @@ Map *Map::clone() const
     foreach (const Layer *layer, mLayers)
         o->addLayer(layer->clone());
     o->mTilesets = mTilesets;
+    o->mGidMapper = mGidMapper;
     o->setProperties(properties());
     return o;
 }
